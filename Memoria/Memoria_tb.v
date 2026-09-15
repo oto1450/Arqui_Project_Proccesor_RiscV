@@ -2,91 +2,74 @@
 
 module Memoria_tb;
 
-    parameter N = 4;
-    parameter M = 8;
-
     reg clk;
-    reg we;
-    reg [N-1:0] dir;
-    reg [M-1:0] data_in;
+    reg [5:0] dir;
+    wire [31:0] data_out;
 
-    wire [M-1:0] data_out;
-
-    Memoria #(
-        .N(N),
-        .M(M)
-    ) DUT (
+    Memoria uut (
         .clk(clk),
-        .we(we),
         .dir(dir),
-        .data_in(data_in),
         .data_out(data_out)
     );
 
-
     // Clock de 10 ns
+    always #5 clk = ~clk;
+
     initial begin
+
         clk = 0;
-
-        forever #5 clk = ~clk;
-    end
-
-
-    initial begin
-
-        // Valores iniciales
-        we = 0;
         dir = 0;
-        data_in = 0;
 
-        // Esperamos un poco
+        // Leer posición 0
         #10;
+        dir = 6'd0;
 
+        #10;
+        $display("MEM[0] = %h", data_out);
 
-        // =====================
-        // ESCRIBIR EN dir = 3
-        // =====================
+        // Leer posición 1
+        dir = 6'd1;
 
-        @(negedge clk);
+        #10;
+        $display("MEM[1] = %h", data_out);
 
-        we = 1;
-        dir = 4'd3;
-        data_in = 8'hAA;
+        // Leer posición 2
+        dir = 6'd2;
 
+        #10;
+        $display("MEM[2] = %h", data_out);
 
-        // =====================
-        // ESCRIBIR EN dir = 5
-        // =====================
+        // Leer posición 3
+        dir = 6'd3;
 
-        @(negedge clk);
+        #10;
+        $display("MEM[3] = %h", data_out);
 
-        we = 1;
-        dir = 4'd5;
-        data_in = 8'h55;
+        // Leer posición 4
+        dir = 6'd4;
 
+        #10;
+        $display("MEM[4] = %h", data_out);
 
-        // =====================
-        // LEER dir = 3
-        // =====================
+        // Leer posición 5
+        dir = 6'd5;
 
-        @(negedge clk);
+        #10;
+        $display("MEM[5] = %h", data_out);
 
-        we = 0;
-        dir = 4'd3;
+        // Leer posición 6
+        dir = 6'd6;
 
+        #10;
+        $display("MEM[6] = %h", data_out);
 
-        // =====================
-        // LEER dir = 5
-        // =====================
+        // Leer posición 7
+        dir = 6'd7;
 
-        @(negedge clk);
+        #10;
+        $display("MEM[7] = %h", data_out);
 
-        we = 0;
-        dir = 4'd5;
-
-
-        #20;
-
+        #10;
         $finish;
 
     end
