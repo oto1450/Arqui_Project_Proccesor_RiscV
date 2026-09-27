@@ -3,19 +3,20 @@
 module Datapath(
     input clk,
     input PCSrc,
-    input ResultSrc,
+    input [1:0] ResultSrc,
     input MemWrite,
     input [2:0] ALUControl,
     input ALUSrc,
     input [1:0] ImmSrc,
     input RegWrite,
     output [31:0] RD1,
-    output [31:0] RD2
+    output [31:0] RD2,
+    output [31:0] Inst,
+    output Zero
 );
 
 // Declaración de cables internos para conectar los módulos
 wire [31:0] PC;
-wire [31:0] Inst;
 wire [31:0] Result;
 wire [31:0] ImmExt;
 wire [31:0] SrcB;
@@ -45,9 +46,9 @@ Register_File RegFile (
 Extend Extend( .A(Inst[31:7]), .sel(ImmSrc), .Imm(ImmExt));
 MUX32 MUXALU( .A(RD2), .B(ImmExt), .sel(ALUSrc), .C(SrcB));
 
-ALU ALU( .A(RD1), .B(SrcB), .ALUcontrol(ALUControl), .C(ALUResult));
+ALU ALU( .A(RD1), .B(SrcB), .ALUcontrol(ALUControl), .C(ALUResult), .Zero(Zero));
 Data_Memory Data( .clk(clk), .A(ALUResult), .WD(RD2), .WE(MemWrite), .RD(ReadData) );
-MUX4_32 MUX4( .A(ALUResult), .B(ReadData), .C(PCPlus4), .D(4'b0000), .sel(ResultSrc), .Y(Result) );
+MUX4_32 MUXResul( .A(ALUResult), .B(ReadData), .C(PCPlus4), .D(32'b0), .sel(ResultSrc), .Y(Result) );
 MUX32 MUXPC( .A(PCPlus4), .B(PCTarget), .sel(PCSrc), .C(PCNext));
 FFD32 PCP( .clk(clk), .D(PCNext), .Q(PC));
 SUM4 PC4( .A(PC), .B(PCPlus4));

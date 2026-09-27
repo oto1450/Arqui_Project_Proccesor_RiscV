@@ -4,7 +4,7 @@ module ALU_Decoder(
 input op5,
 input [1:0] ALUOp,
 input [2:0] funct3,
-input funct7,
+input funct75,
 output reg [2:0] ALUControl
     );
 
@@ -14,7 +14,7 @@ always @(*) begin
 
     ALUControl = 3'b000;
         
-    casex ({ALUOp, funct3, op5, funct7})
+    casex ({ALUOp, funct3, op5, funct75})
     
         7'b01_000_x_x: begin
             ALUControl = 3'b000;

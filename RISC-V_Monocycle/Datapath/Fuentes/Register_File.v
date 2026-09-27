@@ -16,7 +16,7 @@ reg [31:0] banco [31:0];
 integer i;
 initial begin
     for (i = 0; i < 32; i = i + 1) begin
-        banco[i] = 32'd0;
+        banco[i] = 32'b0;
     end
 end
 
