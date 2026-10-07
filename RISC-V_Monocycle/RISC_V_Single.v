@@ -2,8 +2,8 @@
 
 module RISC_V_Single(
     input clk,
-    output [31:0] RD1,
-    output [31:0] RD2
+    output [31:0] Result,
+    output [6:0] op
 );
 
     wire PCSrc;
@@ -17,7 +17,7 @@ module RISC_V_Single(
     wire [31:0] Inst;   // Copia de la instrucción leída para decodificar
     wire Zero;         // Bandera Zero de la ALU
 
-    wire [6:0] op     = Inst[6:0];
+    assign op     = Inst[6:0];
     wire [2:0] funct3 = Inst[14:12];
     wire func75       = Inst[30];
 
@@ -44,10 +44,9 @@ module RISC_V_Single(
         .ALUSrc(ALUSrc),
         .ImmSrc(ImmSrc),
         .RegWrite(RegWrite),
-        .RD1(RD1),
-        .RD2(RD2),
         .Inst(Inst),
-        .Zero(Zero)
+        .Zero(Zero),
+        .Result(Result)
     );
 
 endmodule
