@@ -2,6 +2,7 @@
 
 module RISC_V_Single(
     input clk,
+    input reset,
     output [31:0] Result,
     output [6:0] op
 );
@@ -37,6 +38,7 @@ module RISC_V_Single(
 
     Datapath datapath_inst (
         .clk(clk),
+        .reset(reset),
         .PCSrc(PCSrc),
         .ResultSrc(ResultSrc),
         .MemWrite(MemWrite),

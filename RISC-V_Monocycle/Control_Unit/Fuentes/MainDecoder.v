@@ -13,6 +13,17 @@ module MainDecoder(
     output reg Jump
 );
 
+initial begin
+RegWrite = 1'b0;
+ImmSrc = 2'b0;
+ALUSrc = 1'b0;
+MemWrite = 1'b0;
+ResultSrc = 2'b0;
+ALUOp = 2'b0;
+Branch = 1'b0;
+Jump = 1'b0;
+end
+
 always @(*) begin
 
     // Valores por defecto
@@ -100,12 +111,12 @@ always @(*) begin
         end
 
         default: begin
-            RegWrite  = 1'b0;
+            RegWrite  = 1'b1;
             ImmSrc    = 2'b00;
             ALUSrc    = 1'b0;
             MemWrite  = 1'b0;
             ResultSrc = 2'b0;
-            ALUOp     = 2'b00;
+            ALUOp     = 2'b10;
             Branch    = 1'b0;
         end
                 

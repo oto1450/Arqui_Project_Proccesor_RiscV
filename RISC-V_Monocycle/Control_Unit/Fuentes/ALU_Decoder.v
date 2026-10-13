@@ -8,7 +8,9 @@ input funct75,
 output reg [2:0] ALUControl
     );
 
-//Aqui toca empezar a colocar explicitamente las func3 y func7 para determinar cada accion
+initial begin
+ALUControl = 3'b000;
+end
 
 always @(*) begin
 
