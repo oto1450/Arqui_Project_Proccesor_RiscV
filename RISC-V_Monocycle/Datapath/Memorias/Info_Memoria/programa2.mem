@@ -1,32 +1,53 @@
+// 0x00: addi a0, zero, 78 (0x04E00513)
 13
 05
 E0
 04
+
+// 0x04: addi t0, zero, 9 (0x00900293)
 93
 02
 90
 00
+
+// 0x08: sub a0, a0, t0 (0x40550533)
 33
 05
 55
 40
+
+// 0x0C: beq a0, zero, divider (0x00050863) -> Offset +16 corregido
 63
-04
+08
 05
 00
-63
-5E
+
+// 0x10: bge a0, zero, loop (0xFE055CE3) -> Offset -8
+E3
+5C
 05
 FE
+
+// 0x14: addi a0, zero, 0 (0x00000513)
 13
 05
 00
 00
+
+// 0x18: j done (0x0080006F) -> Offset +8
 6F
-40
 00
+80
 00
+
+// 0x1C: addi a0, zero, 1 (0x00100513)
 13
 05
 10
+00
+
+// 0x20: j done (0x0000006F) -> Offset 0
+6F
+00
+00
 00

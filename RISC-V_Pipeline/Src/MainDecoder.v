@@ -54,7 +54,7 @@ always @(*) begin
         // Tipo R (add, sub, and, or, slt)
         7'd51: begin
             RegWrite  = 1'b1;
-            ImmSrc    = 2'bxx;
+            ImmSrc    = 2'b00;
             ALUSrc    = 1'b0;
             MemWrite  = 1'b0;
             ResultSrc = 2'b00;
@@ -104,9 +104,10 @@ always @(*) begin
             ImmSrc    = 2'b00;
             ALUSrc    = 1'b0;
             MemWrite  = 1'b0;
-            ResultSrc = 2'b0;
+            ResultSrc = 2'b00;
             ALUOp     = 2'b00;
             Branch    = 1'b0;
+            Jump      = 1'b0;
         end
                 
     endcase

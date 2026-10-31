@@ -100,7 +100,7 @@ FFD32 Inst(
     .Q(PCF)
 );
 
-Memoria2 #(.N(20)) InsMem (
+Memoria2 #(.N(6)) InsMem (
     .dir(PCF),
     .data_out(InstF)
 );
@@ -246,7 +246,7 @@ FFDEM EM(
 // MEMORY
 // ================================================================
 
-Data_Memory #(.DIR(6)) DM (
+Data_Memory #(.DIR(1)) DM (
     .clk(clk),
     .A(ALUResultM),
     .WD(WriteDataM),

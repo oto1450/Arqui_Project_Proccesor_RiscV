@@ -2,9 +2,6 @@
 
 //(* KEEP_HIERARCHY = "yes" *)
 module Control_Unit(
-    input clk,
-    input reset,
-    input Zero,
     input [6:0] op,
     input [2:0] funct3,
     input func75,
@@ -14,14 +11,12 @@ module Control_Unit(
     output ALUSrc,
     output [1:0] ImmSrc,
     output RegWrite,
-    output [2:0] ALUControl
+    output [2:0] ALUControl,
+    output JumpD,
+    output BranchD
 );
     
 // Señales internas para conectar la salida del MainDecoder
-wire BranchD;
-wire BranchE;
-wire JumpD;
-wire JumpE;
 wire [1:0] ALUOp;
 
 // Instanciación completa del MainDecoder
@@ -36,24 +31,6 @@ MainDecoder Main (
     .Branch(BranchD),
     .Jump(JumpD)
 );
-
-// Registro Branch DE
-FFD Branch_DE (
-    .clk(clk),
-    .reset(reset),
-    .D(BranchD),
-    .Q(BranchE)
-);
-
-// Registro Jump DE
-FFD Jump_DE (
-    .clk(clk),
-    .reset(reset),
-    .D(JumpD),
-    .Q(JumpE)
-);
-
-assign PCSrc = (BranchE & Zero) | JumpE ;
 
 ALU_Decoder ALU_Dec (
     .op5(op[5]),

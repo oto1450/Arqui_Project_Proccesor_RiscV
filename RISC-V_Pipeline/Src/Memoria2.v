@@ -10,7 +10,7 @@ module Memoria2 #(
 reg [7:0] my_mem [0:2**N-1];
 
 initial begin
-    $readmemh("Datapath.mem", my_mem, 0);
+    $readmemh("programa2.mem", my_mem, 0);
 end
 
 assign data_out = {
