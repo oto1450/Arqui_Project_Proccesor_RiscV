@@ -4,8 +4,12 @@ module FFD32(
     input clk,
     input reset,
     input [31:0] D,
-    output reg [31:0] Q = 32'd0
+    output reg [31:0] Q
 );
+
+initial begin
+Q = 32'd0;
+end
 
 always @(posedge clk or posedge reset) begin
     if (reset)

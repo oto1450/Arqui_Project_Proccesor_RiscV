@@ -15,9 +15,9 @@ module FFDFD(
 );
 
 initial begin
-    I = 32'b0;
-    J = 32'b0;
-    K = 32'b0;
+    I = 32'd0;
+    J = 32'd0;
+    K = 32'd0;
 end
 
 always @(posedge clk or posedge reset) begin

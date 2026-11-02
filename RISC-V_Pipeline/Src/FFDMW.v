@@ -3,7 +3,6 @@
 module FFDMW(
     input clk,
     input reset,
-    input clear,        // Señal de limpieza (flush) añadida
 
     input [31:0] A,
     input [31:0] B,
@@ -25,13 +24,6 @@ end
 
 always @(posedge clk or posedge reset) begin
     if (reset) begin
-        H <= 32'b0;
-        I <= 32'b0;
-        J <= 5'b0;
-        K <= 32'b0;
-    end
-    else if (clear) begin
-        // Si hay un clear/flush, anulamos los datos que viajan hacia la etapa Writeback
         H <= 32'b0;
         I <= 32'b0;
         J <= 5'b0;

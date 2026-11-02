@@ -3,7 +3,6 @@
 module FFDEMCU(
     input clk,
     input reset,
-    input clear,        // Señal de limpieza (flush) añadida
 
     input A,
     input [1:0] B,
@@ -22,12 +21,6 @@ end
 
 always @(posedge clk or posedge reset) begin
     if (reset) begin
-        H <= 1'b0;
-        I <= 2'b0;
-        J <= 1'b0;
-    end
-    else if (clear) begin
-        // Si hay un clear/flush, anulamos las señales de control de la etapa
         H <= 1'b0;
         I <= 2'b0;
         J <= 1'b0;

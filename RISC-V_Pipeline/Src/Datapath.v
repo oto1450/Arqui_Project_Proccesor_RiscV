@@ -38,8 +38,8 @@ wire [31:0] ImmD;
 wire [4:0]  RdD;
 wire [31:0] PC4D;
 wire [31:0] PCD;
-wire [4:0]  Rs1D;        // Extraído de la instrucción en Decode
-wire [4:0]  Rs2D;        // Extraído de la instrucción en Decode
+wire [4:0]  Rs1D;     
+wire [4:0]  Rs2D;  
 
 // ================================================================
 // Señales de Execute
@@ -55,8 +55,8 @@ wire [31:0] PCTargetE;
 wire [4:0]  RdE;
 wire [31:0] PC4E;
 wire [31:0] PCE;
-wire [4:0]  Rs1E;        // Propagado a Execute para la Hazard Unit
-wire [4:0]  Rs2E;        // Propagado a Execute para la Hazard Unit
+wire [4:0]  Rs1E;       
+wire [4:0]  Rs2E;        
 
 // ================================================================
 // Señales de Memory
@@ -128,6 +128,7 @@ FFDFD FD(
     .A(InstF),
     .B(PCF),
     .C(PC4F),
+    
     .I(InstD),
     .J(PCD),
     .K(PC4D)
@@ -230,12 +231,12 @@ SUMA SUM (
 
 FFDEM EM(
     .clk(clk),
-    .reset(reset),
-    .clear(1'b0),      
+    .reset(reset),     
     .A(ALUResultE),
     .B(WriteDataE),
     .C(RdE),
     .D(PC4E),
+    
     .H(ALUResultM),
     .I(WriteDataM),
     .J(RdM),
@@ -260,12 +261,12 @@ Data_Memory #(.DIR(1)) DM (
 
 FFDMW MW(
     .clk(clk),
-    .reset(reset),
-    .clear(1'b0),      
+    .reset(reset),  
     .A(ALUResultM),
     .B(ReadDataM),
     .C(RdM),
     .D(PC4M),
+    
     .H(ALUResultW),
     .I(ReadDataW),
     .J(RdW),
@@ -293,6 +294,7 @@ Hazard_Unit HU_inst (
     .RegWriteM(RegWriteM),
     .RegWriteW(RegWriteW),
     .PCSrc(PCSrc),
+    
     .ForwardAE(ForwardAE),
     .ForwardBE(ForwardBE),
     .FlushD(FlushD),
