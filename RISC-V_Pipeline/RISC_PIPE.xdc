@@ -16,7 +16,7 @@
 set_property -dict { PACKAGE_PIN H16 IOSTANDARD LVCMOS33 } [get_ports { clk }];
 create_clock -add -name sys_clk_pin -period 10.500 -waveform {0.000 5.2500} [get_ports { clk }];
 
-set_property -dict { PACKAGE_PIN D19 IOSTANDARD LVCMOS33 } [get_ports { reset }];
+set_property -dict { PACKAGE_PIN F19 IOSTANDARD LVCMOS33 } [get_ports { reset }];
 
 ## ===================================================================
 ## Result[31:0]
@@ -86,6 +86,6 @@ create_pblock RISC_V
 add_cells_to_pblock [get_pblocks RISC_V] \
     [get_cells -quiet [list CU DECU EMCU MWCU DP]]
     
-resize_pblock [get_pblocks RISC_V] -add {SLICE_X98Y110:SLICE_X113Y124}
+resize_pblock [get_pblocks RISC_V] -add {SLICE_X98Y114:SLICE_X113Y124}
 
 set_property IS_SOFT FALSE [get_pblocks RISC_V]

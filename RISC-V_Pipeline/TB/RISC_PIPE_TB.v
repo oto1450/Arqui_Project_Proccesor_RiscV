@@ -40,7 +40,7 @@ module RISC_PIPE_TB;
         reset = 1'b0;
 
         // Ejecutar el programa y dejar vaciar el pipeline
-        repeat (30) @(posedge clk);
+        repeat (50) @(posedge clk);
 
         #1;
         $finish;

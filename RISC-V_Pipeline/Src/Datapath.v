@@ -100,7 +100,7 @@ FFD32 Inst(
     .Q(PCF)
 );
 
-Memoria2 #(.N(6)) InsMem (
+Memoria2 #(.N(7)) InsMem (
     .dir(PCF),
     .data_out(InstF)
 );
