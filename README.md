@@ -200,9 +200,3 @@ The main goals of this project are:
 - Analyze hardware resource utilization and timing performance.
 - Progressively integrate additional RISC-V extensions.
 - Develop practical experience with FPGA-based processor design and verification.
-
----
-
-## License
-
-License and usage conditions will be specified as the project evolves.
