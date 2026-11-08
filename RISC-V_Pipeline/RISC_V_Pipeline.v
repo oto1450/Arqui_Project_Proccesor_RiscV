@@ -15,7 +15,7 @@ wire PCSrcD;
 wire [1:0] ResultSrcD;
 wire MemWriteD;
 wire ALUSrcD;
-wire [2:0] ImmSrcD;
+wire [1:0] ImmSrcD;
 wire RegWriteD;
 wire [2:0] ALUControlD;
 wire JumpD;
@@ -42,23 +42,25 @@ wire [1:0] ResultSrcW;
 // Control de flujo del pipeline
 wire PCSrcE;
 
+wire FlushD;
+wire FlushE;
 
 // ================================================================
 // CONTROL UNIT
 // ================================================================
 
 Control_Unit CU (
-    .Zero(Zero),
     .op(InstD[6:0]),
     .funct3(InstD[14:12]),
     .func75(InstD[30]),
-    .PCSrc(PCSrcE),
     .ResultSrc(ResultSrcD),
     .MemWrite(MemWriteD),
     .ALUSrc(ALUSrcD),
     .ImmSrc(ImmSrcD),
     .RegWrite(RegWriteD),
-    .ALUControl(ALUControlD)
+    .ALUControl(ALUControlD),
+    .BranchD(BranchD),
+    .JumpD(JumpD)
 );
 
 
@@ -69,6 +71,7 @@ Control_Unit CU (
 FFDDECU DECU (
     .clk(clk),
     .reset(reset),
+    .clear(FlushE),
     .A(RegWriteD),
     .B(ResultSrcD),
     .C(MemWriteD),
@@ -76,6 +79,7 @@ FFDDECU DECU (
     .E(BranchD),
     .F(ALUControlD),
     .G(ALUSrcD),
+    
     .H(RegWriteE),
     .I(ResultSrcE),
     .J(MemWriteE),
@@ -96,6 +100,7 @@ FFDEMCU EMCU (
     .A(RegWriteE),
     .B(ResultSrcE),
     .C(MemWriteE),
+    
     .H(RegWriteM),
     .I(ResultSrcM),
     .J(MemWriteM)
@@ -111,10 +116,12 @@ FFDMWCU MWCU (
     .reset(reset),
     .A(RegWriteM),
     .B(ResultSrcM),
+    
     .H(RegWriteW),
     .I(ResultSrcW)
 );
 
+assign PCSrcE = (BranchE & Zero) | JumpE;
 
 // ================================================================
 // DATAPATH
@@ -129,12 +136,15 @@ Datapath DP (
     .ALUControl(ALUControlE),
     .ALUSrc(ALUSrcE),
     .ImmSrc(ImmSrcD),
-    .RegWrite(RegWriteW),
+    .RegWriteM(RegWriteM),
+    .RegWriteW(RegWriteW),
+    
     .InstD(InstD),
     .Zero(Zero),
-    .ALUResultE(ALUResultE)
+    .ALUResultE(ALUResultE),
+    .FlushD(FlushD),
+    .FlushE(FlushE)
 );
-
 
 // ================================================================
 // OUTPUT ASSIGNMENTS

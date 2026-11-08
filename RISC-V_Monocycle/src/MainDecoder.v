@@ -38,7 +38,7 @@ always @(*) begin
     
     case (op)
         
-        // Cargas (lw, lb, lh, lbu, lhu)
+        // Cargas (lw)
         7'd3: begin
             RegWrite  = 1'b1;
             ImmSrc    = 2'b00;
@@ -50,7 +50,7 @@ always @(*) begin
             Jump      = 1'b0;
         end       
 
-        // Almacenamiento (sw, sb, sh)
+        // Almacenamiento (sw)
         7'd35: begin
             RegWrite  = 1'b0;
             ImmSrc    = 2'b01;

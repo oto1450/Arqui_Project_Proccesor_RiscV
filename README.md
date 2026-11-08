@@ -1,251 +1,208 @@
-# RISC-V Processor — Monocycle and Pipeline
+# RISC-V Processor Architectures — Monocycle, Pipeline and Pipeline PDC
 
-Implementación en **Verilog** de un procesador basado en la arquitectura **RISC-V RV32I**, desarrollado como proyecto de arquitectura de computadores.
+## Project Overview
 
-El repositorio contiene las descripciones hardware necesarias para implementar y analizar un procesador RISC-V en FPGA, comenzando con una arquitectura **monociclo** y posteriormente extendiéndola hacia una arquitectura **pipeline**.
+This repository contains the development and implementation of **RISC-V processors using Verilog HDL**, based on the **RV32I base integer instruction set architecture**.
 
-## Estado del proyecto
+The project explores different processor microarchitectures, starting with a single-cycle (monocycle) implementation and progressing towards pipelined architectures. The main objective is to understand, design, implement, and compare different processor architectures at both the RTL and FPGA implementation levels.
 
-| Arquitectura | Estado |
-|---|---|
-| RISC-V Monociclo | En desarrollo |
-| RISC-V Pipeline | Próximamente |
+Currently, the repository includes three processor implementations:
 
-Actualmente, el repositorio contiene la implementación del procesador **RISC-V monociclo**.
+- **RISC-V Monocycle:** A single-cycle processor in which each instruction is completed within one clock cycle.
+- **RISC-V Pipeline:** A pipelined processor based on the original monocycle architecture, introducing pipeline registers to divide instruction execution into multiple stages.
+- **RISC-V Pipeline PDC (Proof of Concept):** An experimental pipelined implementation without a hazard detection and handling unit, developed to study instruction execution and pipeline behavior without hazard management mechanisms.
 
----
-
-## Estructura del repositorio
-
-```text
-Arqui_Project_Proccesor_RiscV/
-│
-├── RISC-V_Monocycle/
-│   ├── Control_Unit/
-│   ├── Datapath/
-│   ├── RISC_V_Single.v
-│   └── RISC_V_Single_XDC.xdc
-│
-└── README.md
-```
-
-### `RISC-V_Monocycle`
-
-Contiene la implementación del procesador RISC-V de un solo ciclo.
-
-#### `RISC_V_Single.v`
-
-Módulo superior del procesador monociclo. Integra los diferentes bloques que conforman el procesador y establece las conexiones entre la unidad de control, el datapath, la memoria y los demás elementos necesarios para ejecutar las instrucciones.
-
-#### `Control_Unit/`
-
-Contiene los módulos relacionados con la **unidad de control** del procesador.
-
-La unidad de control interpreta los campos de la instrucción RISC-V y genera las señales necesarias para controlar el comportamiento del datapath.
-
-Entre las señales de control se encuentran, dependiendo de la implementación:
-
-- Selección de la fuente del PC.
-- Selección de la fuente del resultado.
-- Escritura en memoria de datos.
-- Habilitación de escritura en el banco de registros.
-- Selección de operandos de la ALU.
-- Operación de la ALU.
-
-#### `Datapath/`
-
-Contiene los módulos que conforman el **camino de datos** del procesador.
-
-El datapath es responsable de transportar y procesar los datos durante la ejecución de las instrucciones. Entre sus componentes se encuentran elementos como:
-
-- Banco de registros.
-- Unidad aritmético-lógica (ALU).
-- Extensión de inmediatos.
-- Sumadores.
-- Multiplexores.
-- Registros.
-- Memoria de instrucciones.
-- Memoria de datos.
-
-#### `RISC_V_Single_XDC.xdc`
-
-Archivo de restricciones de **Vivado** para la implementación del procesador en FPGA.
-
-Contiene las restricciones correspondientes a las entradas y salidas utilizadas por el diseño, así como las restricciones temporales necesarias para el análisis de timing.
+All three implementations share a common functional objective and are progressively being developed towards a more complete implementation of the RV32I instruction set.
 
 ---
 
-## Arquitectura
+## Project Status
 
-La primera implementación corresponde a un procesador **RISC-V monociclo**.
+The repository currently contains three processor architectures at different stages of development.
 
-En esta arquitectura, cada instrucción se ejecuta completamente durante un único ciclo de reloj:
+| Architecture | Description | Status |
+|---|---|---|
+| RISC-V Monocycle | Single-cycle processor | Under development |
+| RISC-V Pipeline | Pipelined processor with pipeline registers | Under development |
+| RISC-V Pipeline PDC | Pipelined proof of concept without hazard handling | Experimental implementation |
 
-```text
-        ┌───────────────────┐
-        │ Instruction       │
-        │ Memory            │
-        └─────────┬─────────┘
-                  │
-                  ▼
-        ┌───────────────────┐
-        │ Control Unit      │
-        └─────────┬─────────┘
-                  │
-                  ▼
-        ┌───────────────────┐
-        │ Datapath          │
-        │                   │
-        │ Register File     │
-        │ ALU               │
-        │ Immediate Ext.    │
-        │ Multiplexers      │
-        └─────────┬─────────┘
-                  │
-                  ▼
-        ┌───────────────────┐
-        │ Data Memory       │
-        └───────────────────┘
-```
-
-El flujo general de ejecución es:
-
-```text
-Fetch
-  ↓
-Decode
-  ↓
-Execute
-  ↓
-Memory
-  ↓
-Write Back
-```
-
-A diferencia de una arquitectura pipeline, estas etapas no se ejecutan simultáneamente sobre diferentes instrucciones, sino que una instrucción completa su ejecución dentro del mismo ciclo.
+The monocycle architecture serves as the foundation for the pipelined implementations. The Pipeline and Pipeline PDC versions currently support the same instruction subset as the monocycle processor, with further instruction integration planned.
 
 ---
 
-## RISC-V
+## Processor Architectures
 
-El procesador está basado en la arquitectura **RISC-V**, utilizando como referencia el conjunto de instrucciones **RV32I**.
+### 1. RISC-V Monocycle
 
-El objetivo del proyecto es implementar progresivamente los principales elementos de un procesador RISC-V y estudiar su comportamiento tanto a nivel funcional como a nivel de implementación en FPGA.
+The monocycle implementation executes each instruction within a single clock cycle.
 
-La arquitectura se desarrollará en dos versiones principales:
+It serves as the initial processor architecture and establishes the fundamental building blocks required for the subsequent implementations, including the control unit, datapath, register file, ALU, and memory interfaces.
 
-### 1. Monociclo
+This architecture provides the functional foundation for the entire project.
 
-La implementación monociclo utiliza un único ciclo de reloj para completar la ejecución de cada instrucción.
+### 2. RISC-V Pipeline
 
-Esta versión permite estudiar:
+The pipeline implementation extends the original monocycle processor by introducing registers between execution stages.
 
-- Datapath.
-- Unidad de control.
-- Banco de registros.
-- ALU.
-- Memoria de instrucciones.
-- Memoria de datos.
-- Extensión de inmediatos.
-- Lógica de actualización del PC.
-- Señales de control.
-
-### 2. Pipeline
-
-Como segunda etapa del proyecto se desarrollará una arquitectura pipeline, en la cual la ejecución de las instrucciones se dividirá en diferentes etapas.
-
-La arquitectura prevista seguirá una organización de cinco etapas:
+The processor follows the conventional five-stage pipeline organization:
 
 ```text
 IF → ID → EX → MEM → WB
 ```
 
-donde:
+Where:
 
-| Etapa | Descripción |
+- **IF:** Instruction Fetch
+- **ID:** Instruction Decode
+- **EX:** Execute
+- **MEM:** Memory Access
+- **WB:** Write Back
+
+This implementation aims to explore instruction-level parallelism and the challenges associated with pipelined processor architectures.
+
+The current development focuses on establishing the pipeline structure and progressively integrating the supported instruction set.
+
+### 3. RISC-V Pipeline PDC (Proof of Concept)
+
+The Pipeline PDC implementation supports the same instruction subset as the other two architectures. Its main difference is the absence of a hazard detection and handling unit, allowing the study of instruction execution in a pipelined architecture without these mechanisms.
+
+Its primary purpose is to serve as a proof of concept for studying how instructions and software routines behave in a pipelined architecture without hazard management mechanisms.
+
+By comparing this implementation with the complete pipeline architecture, it is possible to investigate the importance of hazard handling and its impact on correct instruction execution.
+
+---
+
+## Functional Validation
+
+All three processor implementations share a common functional validation objective.
+
+The test program determines whether a given integer is a multiple of **9**, using repeated subtraction rather than a hardware division instruction.
+
+The algorithm repeatedly subtracts 9 from the input number until one of two conditions is met:
+
+- The result reaches zero: the input number is a multiple of 9.
+- The result becomes negative: the input number is not a multiple of 9.
+
+The final result is stored in the RISC-V **`a0` register**:
+
+| Condition | `a0` |
 |---|---|
-| IF | Instruction Fetch |
-| ID | Instruction Decode |
-| EX | Execute |
-| MEM | Memory Access |
-| WB | Write Back |
+| Input is a multiple of 9 | `1` |
+| Input is not a multiple of 9 | `0` |
 
-La implementación pipeline permitirá posteriormente analizar aspectos como:
-
-- Registros entre etapas.
-- Paralelismo a nivel de instrucciones.
-- Dependencias de datos.
-- Data hazards.
-- Control hazards.
-- Forwarding.
-- Stalls.
-- Branch handling.
-- Frecuencia máxima de operación.
+This program provides a common functional benchmark for evaluating the three architectures and verifying instruction execution, control flow, arithmetic operations, and register updates.
 
 ---
 
-## Herramientas
+## Supported Instructions
 
-El proyecto utiliza principalmente:
+All three processor architectures currently implement the same subset of RV32I instructions. This subset is sufficient to execute the common functional validation program, but it does not represent a complete implementation of the RV32I base instruction set.
 
-- **Verilog HDL**
-- **AMD/Xilinx Vivado**
-- FPGA compatible con el dispositivo definido en el archivo `.xdc`
+The implemented instruction categories include:
 
----
+| Category | Instructions |
+|---|---|
+| Arithmetic | `ADD`, `SUB` |
+| Logical | `AND`, `OR` |
+| Memory Access | `LW`, `SW` |
+| Conditional Branches | `BEQ`, `BGE` |
+| Unconditional Jumps | `J` |
 
-## Simulación y síntesis
+This instruction subset provides the essential functionality required by the current validation program.
 
-El diseño puede ser utilizado para realizar:
-
-1. Simulación funcional.
-2. Síntesis RTL.
-3. Análisis de utilización de recursos.
-4. Análisis de timing.
-5. Implementación en FPGA.
-6. Depuración mediante herramientas como **Integrated Logic Analyzer (ILA)**.
-
-El análisis de timing permitirá comparar posteriormente el comportamiento de las arquitecturas monociclo y pipeline, especialmente en términos de:
-
-- Frecuencia máxima.
-- Critical path.
-- WNS (Worst Negative Slack).
-- Utilización de LUTs.
-- Flip-Flops.
-- Recursos de memoria.
+Instruction support will be progressively expanded across all processor implementations.
 
 ---
 
-## Objetivos del proyecto
-
-- Implementar un procesador RISC-V utilizando Verilog.
-- Comprender la relación entre arquitectura y descripción RTL.
-- Diseñar un procesador monociclo funcional.
-- Analizar la implementación del datapath y la unidad de control.
-- Implementar posteriormente una arquitectura pipeline.
-- Comparar el rendimiento y utilización de recursos de ambas arquitecturas.
-- Implementar y validar el procesador sobre FPGA.
-
----
-
-## Próximas versiones
-
-El repositorio se ampliará progresivamente con nuevas versiones de la arquitectura:
+## Repository Structure
 
 ```text
-RISC-V Processor
+Arqui_Project_Proccesor_RiscV/
 │
-├── RISC-V Monocycle
-│   ├── Control Unit
-│   ├── Datapath
-│   └── Top Module
+├── RISC-V_Monocycle/
+│   ├── Memory_Info/
+│   ├── src/
+│   ├── TB/
+│   ├── RISC_V_Single.v
+│   ├── RISC_V_Single_XDC.xdc
+│   └── README.md
 │
-└── RISC-V Pipeline
-    ├── Control Unit
-    ├── Datapath
-    ├── Pipeline Registers
-    ├── Hazard Unit
-    └── Top Module
+├── RISC-V_Pipeline/
+│   ├── Memory_Info/
+│   ├── src/
+│   ├── TB/
+│   ├── RISC_V_Pipeline.v
+│   ├── RISC_PIPE.xdc
+│   └── README.md
+│
+├── RISC-V_PIPELINE_PDC/
+│   ├── Memory_Info/
+│   ├── src/
+│   ├── TB/
+│   ├── RISC_V_Pipeline_PDC.v
+│   └── README.md
+│
+└── README.md
 ```
 
-La versión pipeline se incorporará posteriormente una vez finalizada y validada la implementación monociclo.
+Each processor architecture has its own directory, containing its respective Verilog source files, testbenches, memory initialization files, and documentation.
+
+- **`src/`**: Contains the Verilog source files.
+- **`TB/`**: Contains the testbenches for simulation and verification.
+- **`Memory_Info/`**: Contains memory initialization files and supporting information for processor testing.
+- **Top-level files**: Include the main processor module and, where applicable, its FPGA constraint file.
+- **`README.md`**: Provides dedicated documentation for each processor architecture.
+
+---
+
+## Tools and Technologies
+
+The project is developed using the following tools and technologies:
+
+- **Verilog HDL:** Hardware description language used to design the processors.
+- **AMD/Xilinx Vivado:** RTL simulation, synthesis, implementation, timing analysis, and FPGA deployment.
+- **FPGA Development Boards:** Hardware platforms for testing and validating the processor implementations.
+
+---
+
+## Development Roadmap
+
+The long-term objective is to develop a more complete RISC-V processor ecosystem, progressively expanding the instruction set and improving the microarchitectures.
+
+Planned development stages include:
+
+1. **Complete RV32I Support:** Expand the currently implemented instruction subset until all three processor architectures support the complete RV32I base integer instruction set.
+2. **Pipeline Development:** Complete the pipelined implementation, including hazard detection, forwarding, stalling, and control hazard management.
+3. **Architecture Comparison:** Evaluate the monocycle and pipeline implementations in terms of clock frequency, execution performance, timing constraints, and FPGA resource utilization.
+4. **FPGA Validation:** Test and validate all processor architectures on physical FPGA hardware.
+5. **RISC-V Extensions:** Explore the integration of additional RISC-V instruction set extensions, depending on compatibility and project requirements.
+
+Potential future extensions include:
+
+- **M:** Integer multiplication and division.
+- **A:** Atomic instructions.
+- **F:** Single-precision floating-point operations.
+- **C:** Compressed instructions.
+
+The implementation of these extensions will depend on the evolution of the base architectures and their respective datapaths and control units.
+
+---
+
+## Project Goals
+
+The main goals of this project are:
+
+- Design and implement RISC-V processor architectures using Verilog HDL.
+- Understand the relationship between instruction set architecture (ISA) and microarchitecture.
+- Explore the differences between single-cycle and pipelined processor designs.
+- Study instruction-level parallelism and pipeline hazards.
+- Implement and validate the RV32I instruction set.
+- Analyze hardware resource utilization and timing performance.
+- Progressively integrate additional RISC-V extensions.
+- Develop practical experience with FPGA-based processor design and verification.
+
+---
+
+## License
+
+License and usage conditions will be specified as the project evolves.
